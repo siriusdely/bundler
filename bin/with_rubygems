@@ -28,6 +28,7 @@ ENV["RUBYOPT"] = %(-I#{rubygems_lib} #{ENV["RUBYOPT"]})
 
 if $0 != __FILE__
   ARGV.unshift($0)
+  ARGV.unshift("ruby") if Gem.win_platform?
 elsif cmd = ARGV.first
   possible_dirs = [
     Pathname.new(__FILE__) + "..",
