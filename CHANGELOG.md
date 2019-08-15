@@ -86,6 +86,7 @@ Documentation:
   - Fix incorrect default value for `cache_path` configuration ([#7229](https://github.com/bundler/bundler/pull/7229))
   - Binstubs documentation has been improved ([#5889](https://github.com/bundler/bundler/pull/5889))
   - Fix incorrect sections when explaining `:git`, `:branch`, and `:ref` options ([#7265](https://github.com/bundler/bundler/pull/7265))
+  - Fix mentions to remembered options in docs to explain the current state ([#7242](https://github.com/bundler/bundler/pull/7242))
 
 Internally, there's also been a bunch of improvements in our development
 environment, test suite, policies, contributing docs, and a bunch of cleanups of
