@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rubygems"
+require_relative "with_rubygems"
 
 module Gem
   if version = ENV["BUNDLER_SPEC_RUBYGEMS_VERSION"]

@@ -150,7 +150,7 @@ module Spec
         end
       end.join
 
-      cmd = "#{sudo} #{Gem.ruby} #{load_path_str} #{requires_str} #{bundle_bin} #{cmd}#{args}"
+      cmd = "#{sudo} #{Gem.ruby} --disable-gems #{load_path_str} #{requires_str} #{bundle_bin} #{cmd}#{args}"
       sys_exec(cmd, env) {|i, o, thr| yield i, o, thr if block_given? }
     end
     bang :bundle

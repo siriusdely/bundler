@@ -40,7 +40,7 @@ module Spec
 
     def gem_load(gem_name, bin_container)
       unload_rubygems
-      load_rubygems
+      require_relative "with_rubygems"
       gem_load_and_activate(gem_name, bin_container)
     end
 
@@ -92,36 +92,6 @@ module Spec
       end
     end
 
-    def run(*cmd)
-      return if system(*cmd, :out => IO::NULL)
-      raise "Running `#{cmd.join(" ")}` failed"
-    end
-
-    def load_rubygems
-      require "pathname"
-
-      version = ENV.delete("RGV")
-      if version
-        rubygems_path = Pathname.new(version).expand_path
-        unless rubygems_path.directory?
-          rubygems_path = Pathname.new("tmp/rubygems").expand_path
-          unless rubygems_path.directory?
-            rubygems_path.parent.mkpath unless rubygems_path.directory?
-            run("git", "clone", "https://github.com/rubygems/rubygems.git", rubygems_path.to_s)
-          end
-
-          Dir.chdir(rubygems_path) do
-            run("git remote update")
-            run("git", "checkout", version, "--quiet")
-          end
-        end
-
-        $:.unshift File.expand_path("lib", rubygems_path)
-      end
-
-      require "rubygems"
-    end
-
     def gem_load_and_activate(gem_name, bin_container)
       gem_activate(gem_name)
       load Gem.bin_path(gem_name, bin_container)
@@ -139,7 +109,7 @@ module Spec
       no_reqs.map!(&:first)
       reqs.map! {|name, req| "'#{name}:#{req}'" }
       deps = reqs.concat(no_reqs).join(" ")
-      gem = Spec::Path.ruby_core? ? ENV["BUNDLE_GEM"] : "#{Gem.ruby} -S gem"
+      gem = Spec::Path.ruby_core? ? ENV["BUNDLE_GEM"] : "#{Gem.ruby} --disable-gems -r#{File.expand_path("with_rubygems.rb", __dir__)} -S gem"
       cmd = "#{gem} install #{deps} --no-document --conservative"
       puts cmd
       system(cmd) || raise("Installing gems #{deps} for the tests to use failed!")

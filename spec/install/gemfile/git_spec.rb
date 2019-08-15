@@ -2,7 +2,7 @@
 
 RSpec.describe "bundle install with git sources" do
   describe "when floating on master" do
-    before :each do
+    before do
       build_git "foo" do |s|
         s.executables = "foobar"
       end
