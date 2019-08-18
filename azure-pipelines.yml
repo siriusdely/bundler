@@ -3,7 +3,7 @@ jobs:
   pool:
     vmImage: 'vs2017-win2016'
   variables:
-    rgv: v3.0.4
+    rgv: v3.0.6
   steps:
   - template: .azure-pipelines/steps.yml
   timeoutInMinutes: 0
