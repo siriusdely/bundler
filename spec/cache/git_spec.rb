@@ -221,22 +221,20 @@ end
       expect(gemspec).to_not match("`echo bob`")
     end
 
-    unless cmd == "package" || Bundler.feature_flag.cache_command_is_package?
-      it "can install after #{cmd} with git not installed" do
-        build_git "foo"
+    it "can install after #{cmd} with git not installed" do
+      build_git "foo"
 
-        gemfile <<-G
-          gem "foo", :git => '#{lib_path("foo-1.0")}'
-        G
-        bundle! "config set cache_all true"
-        bundle! cmd, "all-platforms" => true, :install => false, :path => "./vendor/cache"
+      gemfile <<-G
+        gem "foo", :git => '#{lib_path("foo-1.0")}'
+      G
+      bundle! "config set cache_all true"
+      bundle! cmd, "all-platforms" => true, :install => false, :path => "./vendor/cache"
 
-        simulate_new_machine
-        with_path_as "" do
-          bundle! "config set deployment true"
-          bundle! :install, :local => true
-          expect(the_bundle).to include_gem "foo 1.0"
-        end
+      simulate_new_machine
+      with_path_as "" do
+        bundle! "config set deployment true"
+        bundle! :install, :local => true
+        expect(the_bundle).to include_gem "foo 1.0"
       end
     end
   end
